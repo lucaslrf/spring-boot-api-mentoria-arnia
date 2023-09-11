@@ -15,10 +15,18 @@ import com.api.usersintegration.repository.UserRepository;
 public class UserService {
     
     @Autowired
-    UserRepository userRepository;
-
+    private UserRepository userRepository;
+   
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
+
+    // // protected final UserMapper userMapper;
+
+    // @Autowired
+    // public UserService(UserRepository userRepository, UserMapper userMapper) {        
+    //     this.userMapper = userMapper;
+    //     this.userRepository = userRepository;
+    // }
 
     public List<User> listUsers(){
         return this.userRepository.findAll();
@@ -31,7 +39,7 @@ public class UserService {
         // user.setName(userRequestDTO.getName());   
         User user = userMapper.toUser(userRequestDTO);
         System.out.println("TESTE_SERVICE: "+user.getEmail());
-        return userRepository.save(user).getId();
+        return userRepository.save(user).getId();        
     } 
 
     public String updateUser(UserRequestDTO userRequestDTO) {
