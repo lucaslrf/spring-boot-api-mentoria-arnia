@@ -8,8 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRequestDTO {  
-    private Long id;  
+public class UserRequestDTO {      
     @NotEmpty
     @NotNull
     private String name;
