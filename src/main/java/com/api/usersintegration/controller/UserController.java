@@ -5,6 +5,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +24,9 @@ import com.api.usersintegration.dto.UserRequestDTO;
 import com.api.usersintegration.model.User;
 import com.api.usersintegration.service.UserService;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -27,11 +35,39 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    public List<User> listUsers(@RequestParam(required = false) String name){
-        if(name != null){
-            return this.userService.listUsers(name);
-        }
-        return this.userService.listUsers();
+    @Parameters({
+        @Parameter(name="page"),
+        @Parameter(name="size"),
+        @Parameter(name="sort")
+    })
+    public Page<User> listUsers(
+            @PageableDefault(page=0, size=200)
+            @SortDefault.SortDefaults({
+                @SortDefault(sort="name", direction = Sort.Direction.ASC),
+                @SortDefault(sort="id", direction = Sort.Direction.DESC)
+            })
+            @Parameter(hidden = true) Pageable pageable,
+            @RequestParam(required = false) String name
+        ){
+        return this.userService.listUsers(name, pageable);
+    }
+
+
+    @GetMapping(path="/allUsers")
+    @Parameters({
+        @Parameter(name="page"),
+        @Parameter(name="size"),
+        @Parameter(name="sort")
+    })
+    public Page<User> listAllUsers(
+        @PageableDefault(page=0, size=200)
+            @SortDefault.SortDefaults({
+                @SortDefault(sort="name", direction = Sort.Direction.ASC),
+                @SortDefault(sort="id", direction = Sort.Direction.DESC)
+            })
+            @Parameter(hidden = true) Pageable pageable
+    ){
+        return this.userService.listUsers(pageable);
     }
 
 
@@ -41,7 +77,6 @@ public class UserController {
     }
 
     @GetMapping(path = "/existEmail")
-    @Pageab
     public Boolean existUser(@RequestParam String email){
         return this.userService.existUser(email);
     }

@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.api.usersintegration.dto.UserRequestDTO;
@@ -20,12 +24,12 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public List<User> listUsers(){
-        return this.userRepository.findAll();
+    public Page<User> listUsers(Pageable pageable){
+        return this.userRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
     }
     
-    public List<User> listUsers(String name){
-        return this.userRepository.getUsersByName(name);
+    public Page<User> listUsers(String name, Pageable pageable){
+        return this.userRepository.getUsersByName(name, pageable);
     }
 
     public Long registerUser(UserRequestDTO userRequestDTO){      
