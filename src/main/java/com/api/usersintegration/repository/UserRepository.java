@@ -9,15 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.api.usersintegration.model.User;
 
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select count(*) from User u")
     int countUsers();
 
     @Query("select u from User u WHERE u.login like %:login%")
     User getUserByLogin(String login);
 
-    @Query("select u from User u WHERE u.name like %:name%")
-    List<User> getUsersByName(String name);
+    // @Query("select u from User u WHERE u.name like %:name%")
+    // List<User> getUsersByName(String name);
 
     Boolean existsByEmail(String email);
 
@@ -28,6 +28,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
     @Query("select u from User u WHERE u.name like %:name%")
     Page<User> getUsersByName(String name, Pageable pageable);
-
 
 }

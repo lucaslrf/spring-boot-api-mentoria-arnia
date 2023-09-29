@@ -15,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,13 @@ public class User {
     @Column
     private String email;
 
+    @Setter
+    @NotBlank
+    @Size(max = 120)
+    @Column
+    private String password;
+
+    @Setter
     @ManyToMany
     @JoinTable(name="users_profiles",
         joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
@@ -56,5 +65,11 @@ public class User {
     @Column
     @UpdateTimestamp
     private Date updatedAt;
+
+    public User(String login, String email, String password) {
+        this.login = login;
+        this.email = email;
+        this.password = password;
+    }
 
 }

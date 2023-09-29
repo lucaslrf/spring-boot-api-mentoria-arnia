@@ -1,7 +1,11 @@
 package com.api.usersintegration.model;
 
+import com.api.usersintegration.enums.ProfileEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -21,7 +25,8 @@ public class Profile {
     private Long id;
 
     @Setter
-    @Column
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ProfileEnum name;
     
 }
